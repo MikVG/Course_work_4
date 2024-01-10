@@ -47,16 +47,17 @@ class HeadHunterAPI(JobPortal):
         vacancies_all = []
 
         for vacancy in data:
-
             if vacancy['salary'] is not None and vacancy['salary']['currency'] == 'RUR':
-                vacancies_list.append([
-                    vacancy['employer']['name'],
-                    vacancy['name'],
-                    vacancy['alternate_url'],
-                    vacancy['snippet']['requirement'],
-                    vacancy['salary']['from'],
-                    vacancy['salary']['to']
-                ])
+                try:
+                    vacancies_list.append([
+                        vacancy['employer']['name'],
+                        vacancy['name'],
+                        vacancy['alternate_url'],
+                        vacancy['snippet']['requirement'],
+                        vacancy['salary']['from'],
+                        vacancy['salary']['to']])
+                except KeyError:
+                    continue
 
         for vacancy in vacancies_list:
             vacancy_dict = {
@@ -135,9 +136,4 @@ class SuperJobAPI(JobPortal):
 
             vacancies_all.append(vacancy_dict)
 
-        print(vacancies_all)
-
-        #return vacancies_all
-
-        #print(vacancies_list)
-
+        return vacancies_all
