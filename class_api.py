@@ -95,17 +95,49 @@ class SuperJobAPI(JobPortal):
         :param vacancy:
         :return:
         """
+
+        vacancies_list = []
+        vacancies_all = []
+
         API_KEY = os.getenv('API_KEY_SJ')
         header = {"X-Api-App-Id": API_KEY}
 
         params = {"keyword": vacancy, "per_page": 100, "area": 113, "page": 1}
         response = requests.get(URL_SJ, params=params, headers=header)
         vacancies = response.json()['objects']
-        #print(vacancies)
-        for i in vacancies:
-            print(i['client']['title'])
-            #print(i)
-            #print(i['currency'])
-        #print(vacancies[0])
-        #print(vacancies[0]['client']['title'])
+        for vacancy in vacancies:
+            if vacancy['currency'] == 'rub':
+                try:
+                    vacancies_list.append([
+                        vacancy['client']['title'],
+                        vacancy['profession'],
+                        vacancy['client']['link'],
+                        vacancy['candidat'],
+                        vacancy['payment_from'],
+                        vacancy['payment_to']])
+                except KeyError:
+                    continue
+
+        for vacancy in vacancies_list:
+            vacancy_dict = {
+                'employer': vacancy[0],
+                'name': vacancy[1],
+                'link': vacancy[2],
+                'requirements': vacancy[3],
+                'salary_from': vacancy[4],
+                'salary_to': vacancy[5]
+            }
+
+            if vacancy_dict['salary_from'] is None:
+                vacancy_dict['salary_from'] = 0
+            elif vacancy_dict['salary_to'] is None:
+                vacancy_dict['salary_to'] = vacancy_dict['salary_from']
+
+            vacancies_all.append(vacancy_dict)
+
+        print(vacancies_all)
+
+        #return vacancies_all
+
+        #print(vacancies_list)
 
