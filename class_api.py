@@ -33,31 +33,31 @@ class HeadHunterAPI(JobPortal):
         pass
 
     def get_vacancies(self, vacancy):
-        print(vacancy)
         """
         метод для получения списка вакансий сайта Head Hunter
         :param vacancy:
         :return:
         """
-        params = {'text': vacancy, 'areas': 113, 'per_page': 3, 'page': 1}
-        response = requests.get(URL_HH, params=params)
-        data = response.json()['items']
+        for num in range(50):
+            params = {'text': vacancy, 'areas': 113, 'per_page': 20, 'page': num}
+            response = requests.get(URL_HH, params=params)
+            data = response.json()['items']
 
-        vacancies_list = []
-        vacancies_all = []
+            vacancies_list = []
+            vacancies_all = []
 
-        for vacancy in data:
-            if vacancy['salary'] is not None and vacancy['salary']['currency'] == 'RUR':
-                try:
-                    vacancies_list.append([
-                        vacancy['employer']['name'],
-                        vacancy['name'],
-                        vacancy['alternate_url'],
-                        vacancy['snippet']['requirement'],
-                        vacancy['salary']['from'],
-                        vacancy['salary']['to']])
-                except KeyError:
-                    continue
+            for vacancy in range(len(data)):
+                if data[vacancy]['salary'] is not None and data[vacancy]['salary']['currency'] == 'RUR':
+                    try:
+                        vacancies_list.append([
+                            data[vacancy]['employer']['name'],
+                            data[vacancy]['name'],
+                            data[vacancy]['alternate_url'],
+                            data[vacancy]['snippet']['requirement'],
+                            data[vacancy]['salary']['from'],
+                            data[vacancy]['salary']['to']])
+                    except KeyError:
+                        continue
 
         for vacancy in vacancies_list:
             vacancy_dict = {
@@ -103,21 +103,23 @@ class SuperJobAPI(JobPortal):
         API_KEY = os.getenv('API_KEY_SJ')
         header = {"X-Api-App-Id": API_KEY}
 
-        params = {"keyword": vacancy, "per_page": 100, "area": 113, "page": 1}
-        response = requests.get(URL_SJ, params=params, headers=header)
-        vacancies = response.json()['objects']
-        for vacancy in vacancies:
-            if vacancy['currency'] == 'rub':
-                try:
-                    vacancies_list.append([
-                        vacancy['client']['title'],
-                        vacancy['profession'],
-                        vacancy['client']['link'],
-                        vacancy['candidat'],
-                        vacancy['payment_from'],
-                        vacancy['payment_to']])
-                except KeyError:
-                    continue
+        for num in range(20):
+            params = {"keyword": vacancy, "per_page": 1000, "area": 113, "page": num}
+            response = requests.get(URL_SJ, params=params, headers=header)
+            vacancies = response.json()['objects']
+
+            for vacancy in vacancies:
+                if vacancy['currency'] == 'rub':
+                    try:
+                        vacancies_list.append([
+                            vacancy['client']['title'],
+                            vacancy['profession'],
+                            vacancy['client']['link'],
+                            vacancy['candidat'],
+                            vacancy['payment_from'],
+                            vacancy['payment_to']])
+                    except KeyError:
+                        continue
 
         for vacancy in vacancies_list:
             vacancy_dict = {
