@@ -12,6 +12,7 @@ class JobPortal(ABC):
     Абстрактный класс для работы с API сайтов вакансий
     """
 
+    @abstractmethod
     def get_vacancies(self, vacancy):
         """
         Получение информации о вакансиях через API

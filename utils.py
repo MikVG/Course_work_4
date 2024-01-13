@@ -3,14 +3,21 @@ from class_file import JSONSaver
 
 from class_vacancies import Vacancy
 
-
+# объявление экземпляра класса поиска вакансий на сайте HeadHunter
 hh_api = HeadHunterAPI()
+
+# объявление экземпляра класса поиска вакансий на сайте SuperJob
 superjob_api = SuperJobAPI()
 
+# объявление экземпляра класса работы в файлом JSON
 json_saver = JSONSaver()
 
 
 def search():
+    """
+    функция запускающая поиск по вакансии на порталах HeadHunter и SuperJob
+    :return:
+    """
     user_vacancy = input("Введите ключевое слово для поиска вакансии: ")
 
     vacancies = None
@@ -29,6 +36,11 @@ def search():
 
 
 def open():
+    """
+    Функция от вывода списка записанных вакансий в файл JSON на экран с возможностью сортировки по уровню
+    начальной зарплаты
+    :return:
+    """
     user_sort = input("""Хотите ли выполнить сортировку вакансий по зарплате?
     1 - Да
     2 - Нет\n""")
@@ -53,8 +65,16 @@ def open():
 
 
 def clear_file():
+    """
+    Функция для очистки файла JSON
+    :return:
+    """
     json_saver.clear_file()
 
 
 def exit():
+    """
+    Функция для выполнения выхода из программы
+    :return:
+    """
     print("Программа завершила работу!")
