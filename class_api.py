@@ -38,7 +38,7 @@ class HeadHunterAPI(JobPortal):
         :param vacancy:
         :return:
         """
-        for num in range(50):
+        for num in range(2):
             params = {'text': vacancy, 'areas': 113, 'per_page': 20, 'page': num}
             response = requests.get(URL_HH, params=params)
             data = response.json()['items']
@@ -103,7 +103,7 @@ class SuperJobAPI(JobPortal):
         API_KEY = os.getenv('API_KEY_SJ')
         header = {"X-Api-App-Id": API_KEY}
 
-        for num in range(20):
+        for num in range(2):
             params = {"keyword": vacancy, "per_page": 1000, "area": 113, "page": num}
             response = requests.get(URL_SJ, params=params, headers=header)
             vacancies = response.json()['objects']
